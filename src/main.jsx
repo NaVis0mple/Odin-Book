@@ -2,9 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { Route, RouterProvider, Routes, createBrowserRouter, createRoutesFromElements, useNavigate } from 'react-router-dom'
+import { Link, Route, RouterProvider, Routes, createBrowserRouter, createRoutesFromElements, useNavigate } from 'react-router-dom'
 import Login from './Login.jsx'
 import ProtectRoute from './ProtectRoute.jsx'
+import FriendList from './FriendList.jsx'
+import Logout from './Logout.jsx'
+import FriendRequest from './FriendRequest.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +19,17 @@ const router = createBrowserRouter(
       <Route
         path='/login'
         element={<Login />}
+      />
+      <Route
+        path='/friend'
+        element={
+          <ProtectRoute>
+            <Link to='/'>home</Link>
+            <Logout />
+            <FriendList />
+            <FriendRequest />
+          </ProtectRoute>
+}
       />
     </>
   )

@@ -2,12 +2,15 @@ import { useEffect } from 'react'
 import './App.css'
 import CheckLogin from './checklogin'
 import Logout from './Logout'
+import FriendList from './FriendList'
+import FriendRequest from './FriendRequest'
+import { Link } from 'react-router-dom'
 
 function App () {
   return (
     <>
-      {/* <CheckLogin /> */}
       <Logout />
+      <Link to='/friend'>Friend</Link>
     </>
 
   )

@@ -17,3 +17,16 @@ async function main () {
 }
 ```
 the session will auto update when relogin with save user,and if expire will auto delete fron db, so its good
+
+
+## test 
+dbserver: mongodb-memory-server
+data: faker
+## product
+dbserver:mongodb atlas
+
+
+
+##
+passport-custom is good to build test account,
+faker user is trigger in facebookstrategy, maybe move it out
