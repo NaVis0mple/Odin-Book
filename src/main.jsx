@@ -8,6 +8,8 @@ import ProtectRoute from './ProtectRoute.jsx'
 import FriendList from './FriendList.jsx'
 import Logout from './Logout.jsx'
 import FriendRequest from './FriendRequest.jsx'
+import CreatePost from './createPost.jsx'
+import { FriendshipProvider } from './useFriendship.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,14 +22,17 @@ const router = createBrowserRouter(
         path='/login'
         element={<Login />}
       />
+
       <Route
         path='/friend'
         element={
           <ProtectRoute>
-            <Link to='/'>home</Link>
-            <Logout />
-            <FriendList />
-            <FriendRequest />
+            <FriendshipProvider>
+              <Link to='/'>home</Link>
+              <Logout />
+              <FriendList />
+              <FriendRequest />
+            </FriendshipProvider>
           </ProtectRoute>
 }
       />

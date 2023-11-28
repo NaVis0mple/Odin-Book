@@ -17,7 +17,7 @@ const MongoStore = require('connect-mongo')
 const User = require('./model/user')
 
 const { MongoMemoryServer } = require('mongodb-memory-server')
-const { generateFakeUsers, generateFakeFriendship, generateFakeMeUserObjectId } = require('./seed')
+const { generateFakeUsers, generateFakeFriendship, generateFakeMeUserObjectId, generateFakePost } = require('./seed')
 
 const app = express()
 
@@ -121,9 +121,7 @@ passport.use(new FacebookStrategy({
       })
 
       await newUser.save()
-      generateFakeUsers(3)
-      generateFakeFriendship(0)
-      generateFakeFriendship(1)
+
       return done(null, newUser)
     } else {
       const newUser = new User({

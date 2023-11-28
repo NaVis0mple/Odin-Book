@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-
+import { UseFriendshipContext } from './useFriendship'
 function FriendRequest () {
   const [friendName, setFriendName] = useState('')
   const [userList, setUserList] = useState([])
+  const { fetchFriendShip } = UseFriendshipContext()
+  const [addFriendClick, setAddFriendClick] = useState(false)
   // get user list
   useEffect(() => {
     try {
@@ -23,6 +25,7 @@ function FriendRequest () {
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       fetchPostFriendRequest()
+      setAddFriendClick(true)
     }
     if (e.keyCode === 9) {
       e.preventDefault()
@@ -46,6 +49,12 @@ function FriendRequest () {
     const postback = await post.json()
     console.log(postback + 'back')
   }
+  useEffect(() => {
+    if (addFriendClick) {
+      fetchFriendShip()
+      setAddFriendClick(false)
+    }
+  }, [fetchFriendShip, addFriendClick])
   return (
     <div>
       <input
