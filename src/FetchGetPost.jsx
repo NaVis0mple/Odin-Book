@@ -1,44 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Icon from '@mdi/react'
 import { mdiThumbUpOutline, mdiThumbUp } from '@mdi/js'
+import moment from 'moment'
+import { UsePostContext } from './context/usePost'
 
 const FetchPost = () => {
-  const [post, setPost] = useState([])
-  const [like, setLike] = useState({})
-  const [me, setMe] = useState('')
-  const [clickLike, setClickLike] = useState(false)
-
-  // me
-  useEffect(() => {
-    const fetchMe = async () => {
-      const fetchData = await fetch('http://localhost:3000/me', {
-        method: 'GET',
-        credentials: 'include'
-      })
-      const jsonData = await fetchData.json()
-      setMe(jsonData)
-    }
-    fetchMe()
-  }, [])
-
-  // fetch posts
-  const fetchPost = useCallback(async () => {
-    const fetchData = await fetch('http://localhost:3000/post', {
-      method: 'GET',
-      credentials: 'include'
-    })
-    const jsonData = await fetchData.json()
-    setPost(jsonData)
-
-    for (const post of jsonData) {
-      if (post.like.includes(me._id)) {
-        setLike(preLike => ({ ...preLike, [post._id]: true }))
-      } else {
-        setLike(preLike => ({ ...preLike, [post._id]: false }))
-      }
-    }
-  }, [me._id])
-
+  const { fetchPost, setLike, clickLike, setClickLike, like, post } = UsePostContext()
   useEffect(() => {
     fetchPost()
   }, [fetchPost])
@@ -70,7 +37,7 @@ const FetchPost = () => {
     updatePostLike()
 
     setClickLike(false)
-  }, [like, clickLike, fetchPost])
+  }, [like, clickLike, fetchPost, setClickLike])
 
   // create comment
   const [createComment, setCreateComment] = useState({})
@@ -95,54 +62,57 @@ const FetchPost = () => {
   }
   return (
     <>
-      {post.map(p =>
-        <div key={p._id}>
-          <div style={{ color: 'green' }}>{p.user.first_name + ' ' + p.user.last_name}</div>
-          <div>{p.text}</div>
-          <div>
-            <div>{p.like.length}</div>
-            <button onClick={() => {
-              handleLikeButtonClick(p._id)
-            }}
-            >
-              {like[p._id]
-                ? (
-                  <div>
-                    <Icon path={mdiThumbUp} size={1} />
-
-                  </div>
-                  )
-                : (
-                  <div>
-                    <Icon path={mdiThumbUpOutline} size={1} />
-
-                  </div>
-                  )}
-
-            </button>
-          </div>
-          <div>
-            {p.comment.map(comment =>
-              <div key={comment._id}>
-                <div style={{ color: 'red' }}>{comment.user.first_name + ' ' + comment.user.last_name}</div>
-                <div>{comment.text}</div>
-
-              </div>)}
-          </div>
-          <div>
-            <input
-              type='text'
-              name={p._id}
-              value={Object.keys(createComment)[0] === p._id ? Object.values(createComment)[0] : ''}
-              onChange={(e) => {
-                const { name, value } = e.target
-                setCreateComment({ [p._id]: value })
-                console.log(Object.entries(createComment)[0])
+      {post
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .map(p =>
+          <div key={p._id}>
+            <div style={{ color: 'green' }}>{p.user.first_name + ' ' + p.user.last_name}</div>
+            <div>{moment(p.timestamp).format('MM DD YYYY,  HH:mm:ss')} {moment(p.timestamp).fromNow()}  </div>
+            <div>{p.text}</div>
+            <div>
+              <div>{p.like.length}</div>
+              <button onClick={() => {
+                handleLikeButtonClick(p._id)
               }}
-              onKeyDown={(e) => handleKeyDown(e)}
-            />
-          </div>
-        </div>)}
+              >
+                {like[p._id]
+                  ? (
+                    <div>
+                      <Icon path={mdiThumbUp} size={1} />
+
+                    </div>
+                    )
+                  : (
+                    <div>
+                      <Icon path={mdiThumbUpOutline} size={1} />
+
+                    </div>
+                    )}
+
+              </button>
+            </div>
+            <div>
+              {p.comment.map(comment =>
+                <div key={comment._id}>
+                  <div style={{ color: 'red' }}>{comment.user.first_name + ' ' + comment.user.last_name}</div>
+                  <div>{comment.text}</div>
+
+                </div>)}
+            </div>
+            <div>
+              <input
+                type='text'
+                name={p._id}
+                value={Object.keys(createComment)[0] === p._id ? Object.values(createComment)[0] : ''}
+                onChange={(e) => {
+                  const { name, value } = e.target
+                  setCreateComment({ [p._id]: value })
+                  console.log(Object.entries(createComment)[0])
+                }}
+                onKeyDown={(e) => handleKeyDown(e)}
+              />
+            </div>
+          </div>)}
     </>
   )
 }

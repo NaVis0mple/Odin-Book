@@ -1,9 +1,47 @@
 import { useState, useEffect, useCallback } from 'react'
-import { UseFriendshipContext } from './useFriendship'
+import { UseFriendshipContext } from './context/useFriendship'
+import { UseSocket } from './socketio/socketio'
 
 function FriendList () {
   const [me, setMe] = useState()
   const { friendList, pendingList, acceptedList, fetchFriendShip } = UseFriendshipContext()
+  const socket = UseSocket().current
+  // socket
+  useEffect(() => {
+    if (!socket) { return } // if refresh socket may not be create first
+    if (me) {
+      // add to connect array
+      socket.emit('connectinfo', { userid: me._id })
+    }
+    socket.on('friendAddNotify', status => {
+      if (status) {
+        alert('someoneaddyou')
+        fetchFriendShip()
+      }
+    })
+
+    socket.on('friendAcceptedNotify', data => {
+      if (data) {
+        alert(data + ' ' + 'accepted')
+        fetchFriendShip()
+      }
+    })
+
+    socket.on('friendRejectedNotify', data => {
+      if (data) {
+        alert(data + ' ' + 'rejected')
+        fetchFriendShip()
+      }
+    })
+
+    return () => {
+      socket.off('friendAddNotify')
+      socket.off('friendAcceptedNotify')
+      socket.off('friendRejectedNotify')
+    }
+  }, [me, socket, fetchFriendShip])
+  // me
+
   useEffect(() => {
     const fetchMe = async () => {
       const fetchData = await fetch('http://localhost:3000/me', {
@@ -34,6 +72,7 @@ function FriendList () {
       body: formData
     })
     const response = await fetchData.json()
+    socket.emit('friendRequestAcceptedNotification', response.data)
     console.log(response)
     fetchFriendShip()
   }
@@ -48,6 +87,7 @@ function FriendList () {
       body: formData
     })
     const response = await fetchData.json()
+    socket.emit('friendRequestRejectedNotification', response.data)
     console.log(response)
     fetchFriendShip()
   }

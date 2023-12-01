@@ -1,20 +1,23 @@
 import { useState } from 'react'
-
+import { UsePostContext } from './context/usePost'
 function CreatePost () {
   const [textarea, setTextarea] = useState('')
+  const { fetchPost, setLike, clickLike, setClickLike, like, post } = UsePostContext()
 
   function handleSubmit () {
     console.log(textarea)
     const formData = new FormData()
     formData.append('postText', textarea)
     const fetchCreatePost = async () => {
-      const fetchPost = await fetch('http://localhost:3000/createpost', {
+      const fetchPostResponse = await fetch('http://localhost:3000/createpost', {
         method: 'POST',
         credentials: 'include',
         body: formData
       })
-      const jsonData = await fetchPost.json()
+      const jsonData = await fetchPostResponse.json()
       console.log(jsonData)
+      await fetchPost()
+      setTextarea('')
     }
     fetchCreatePost()
   }

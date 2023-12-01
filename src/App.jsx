@@ -7,13 +7,16 @@ import FriendRequest from './FriendRequest'
 import { Link } from 'react-router-dom'
 import FetchPost from './FetchGetPost.jsx'
 import CreatePost from './createPost.jsx'
+import { PostContextProvider } from './context/usePost.jsx'
+import Icon from '@mdi/react'
+import { mdiAccountGroup } from '@mdi/js'
 
 function App () {
   return (
     <>
+      <Link to='/friend'><Icon path={mdiAccountGroup} size={1} /></Link>
       <Logout />
       <CreatePost />
-      <Link to='/friend'>Friend</Link>
       <FetchPost />
     </>
 

@@ -9,39 +9,54 @@ import FriendList from './FriendList.jsx'
 import Logout from './Logout.jsx'
 import FriendRequest from './FriendRequest.jsx'
 import CreatePost from './createPost.jsx'
-import { FriendshipProvider } from './useFriendship.jsx'
+import { FriendshipProvider } from './context/useFriendship.jsx'
+import { PostContextProvider } from './context/usePost.jsx'
+import Icon from '@mdi/react'
+import { mdiHome } from '@mdi/js'
+import { SocketProvider } from './socketio/socketio.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route path='/'>
       <Route
         path='/'
-        element={<ProtectRoute><App /></ProtectRoute>}
+        element={
+          <ProtectRoute>
+            <SocketProvider>
+              <PostContextProvider>
+                <App />
+              </PostContextProvider>
+            </SocketProvider>
+          </ProtectRoute>
+}
       />
       <Route
         path='/login'
         element={<Login />}
       />
-
       <Route
         path='/friend'
         element={
           <ProtectRoute>
-            <FriendshipProvider>
-              <Link to='/'>home</Link>
-              <Logout />
-              <FriendList />
-              <FriendRequest />
-            </FriendshipProvider>
+            <SocketProvider>
+              <FriendshipProvider>
+                <Link to='/'><Icon path={mdiHome} size={1} /></Link>
+                <Logout />
+                <FriendList />
+                <FriendRequest />
+              </FriendshipProvider>
+            </SocketProvider>
           </ProtectRoute>
 }
       />
-    </>
+    </Route>
   )
 )
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+
     <RouterProvider router={router} />
+
   </React.StrictMode>
 )

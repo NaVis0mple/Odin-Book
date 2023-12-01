@@ -12,10 +12,10 @@ function CheckLogin () {
       })
       .then(data => {
         if (data.authenticated === true) {
-          console.log('pass1')
+          // console.log('pass1')
           console.log('User is authenticated:', data.user)
         } else {
-          console.log('pass2')
+          // console.log('pass2')
           console.log('User is not authenticated.')
         }
       })

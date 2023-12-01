@@ -21,6 +21,65 @@ app.set('port', port)
 
 const server = http.createServer(app)
 
+// socket.io
+const { Server } = require('socket.io')
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    credentials: true
+  }
+})
+const connectedUsers = []
+io.on('connection', (socket) => {
+  console.log(socket.id + 'connect') // use this to get the id
+
+  socket.on('disconnect', () => {
+    console.log(socket.id + 'disconnected')
+    const index = connectedUsers.findIndex((connection) => connection.socketid === socket.id)
+    if (index !== -1) {
+      // remove form array
+      connectedUsers.splice(index, 1)
+    }
+    console.log(connectedUsers)
+  })
+  socket.on('connectinfo', (connectinfo) => {
+    const newUser = { userid: connectinfo.userid, socketid: socket.id }
+    const index = connectedUsers.findIndex((connection) => connection.socketid === socket.id)
+    if (index === -1) {
+      // User not found, add the new user to the array
+      connectedUsers.push(newUser)
+    } else {
+      // User already in the array, you may want to update the existing user's information
+      // For example, you can replace the existing user with the new user
+      connectedUsers[index] = newUser
+    }
+  })
+  socket.on('friendRequestPostNotification', (friendid) => {
+    // notify friendid that someone add him
+    const notifyId = friendid.friendrequestnameId
+    const targetConnection = connectedUsers.find((connection) => connection.userid === notifyId)
+    if (targetConnection) {
+      io.to(targetConnection.socketid).emit('friendAddNotify', true)
+      console.log(targetConnection.socketid + 'XXX')
+    }
+  })
+
+  socket.on('friendRequestAcceptedNotification', (data) => {
+    const targetConnection = connectedUsers.find((connection) => connection.userid === data.user._id)
+
+    if (targetConnection) {
+      io.to(targetConnection.socketid).emit('friendAcceptedNotify', data.friend.first_name + data.friend.last_name)
+    }
+  })
+  socket.on('friendRequestRejectedNotification', (data) => {
+    const targetConnection = connectedUsers.find((connection) => connection.userid === data.user._id)
+    if (targetConnection) {
+      console.log(targetConnection)
+      io.to(targetConnection.socketid).emit('friendRejectedNotify', data.friend.first_name + data.friend.last_name)
+    }
+  })
+})
+
 /**
  * Listen on provided port, on all network interfaces.
  */

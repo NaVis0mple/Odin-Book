@@ -91,28 +91,37 @@ router.post('/friendRequest', upload.none(), async (req, res, next) => { // need
     ]
   }).exec()
   if (findfriendship) {
-    res.json('already send friend request')
+    res.json({ status: 1, mes: 'already send friend request' })
   } else if (findFriendRequestName) {
     const newFriendship = new Friendship({
       user: req.user._id,
       friend: findFriendRequestName._id
     })
     await newFriendship.save()
-    res.json('add friend ')
+    res.json({ status: 2, mes: 'add friend ', friendid: findFriendRequestName._id, me: req.user })
   } else {
-    res.json(friendRequestName + 'not in db')
+    res.json({ status: 3, mes: friendRequestName + 'not in db' })
   }
 })
 
 router.post('/friendRequestRespond', upload.none(), async (req, res, next) => {
   if (req.body.friendRequestAction === 'accept') {
-    const findFriendship = await Friendship.findByIdAndUpdate(req.body.friendship_id, { status: 'accepted' }).exec()
+    const findFriendship = await Friendship
+      .findByIdAndUpdate(req.body.friendship_id, { status: 'accepted' })
+      .populate('friend')
+      .populate('user')
+      .exec()
     await findFriendship.save()
+    res.json({ status: 1, mes: 'he add you', data: findFriendship })
   }
   if (req.body.friendRequestAction === 'reject') {
-    const findFriendship = await Friendship.findByIdAndDelete(req.body.friendship_id).exec()
+    const findFriendship = await Friendship
+      .findByIdAndDelete(req.body.friendship_id)
+      .populate('friend')
+      .populate('user')
+      .exec()
+    res.json({ status: 2, mes: 'he reject you', data: findFriendship })
   }
-  res.json('hi')
 })
 
 router.get('/post', async (req, res, next) => {

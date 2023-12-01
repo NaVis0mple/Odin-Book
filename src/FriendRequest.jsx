@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { UseFriendshipContext } from './useFriendship'
+import { UseFriendshipContext } from './context/useFriendship'
+import { UseSocket } from './socketio/socketio'
 function FriendRequest () {
   const [friendName, setFriendName] = useState('')
   const [userList, setUserList] = useState([])
   const { fetchFriendShip } = UseFriendshipContext()
   const [addFriendClick, setAddFriendClick] = useState(false)
+  const socket = UseSocket().current
   // get user list
   useEffect(() => {
     try {
@@ -46,12 +48,17 @@ function FriendRequest () {
       credentials: 'include',
       body: formData
     })
+
     const postback = await post.json()
-    console.log(postback + 'back')
+    if (postback.status === 2) {
+      socket.emit('friendRequestPostNotification', { friendrequestnameId: postback.friendid })
+    }
+    console.log(postback)
   }
   useEffect(() => {
     if (addFriendClick) {
       fetchFriendShip()
+
       setAddFriendClick(false)
     }
   }, [fetchFriendShip, addFriendClick])
