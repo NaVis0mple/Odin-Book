@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 function Logout () {
   const navigate = useNavigate()
   const handleCheck = () => {
-    fetch(import.meta.env.VITE_BACKEND_URL + '/logout', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/logout`, {
       method: 'GET',
       credentials: 'include'
     })

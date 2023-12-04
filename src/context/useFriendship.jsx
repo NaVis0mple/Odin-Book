@@ -5,7 +5,7 @@ const useFriendship = () => {
   const [pendingList, setPendingList] = useState([])
   const [acceptedList, setAcceptedList] = useState([])
   const fetchFriendShip = useCallback(async () => {
-    const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/friendship', {
+    const fetchData = await fetch(`${import.meta.env.VITE_BACKEND_URL}/friendship`, {
       method: 'GET',
       credentials: 'include'
     })

@@ -10,7 +10,7 @@ function CreatePost () {
     const formData = new FormData()
     formData.append('postText', textarea)
     const fetchCreatePost = async () => {
-      const fetchPostResponse = await fetch(import.meta.env.VITE_BACKEND_URL + '/createpost', {
+      const fetchPostResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/createpost`, {
         method: 'POST',
         credentials: 'include',
         body: formData

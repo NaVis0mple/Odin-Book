@@ -8,7 +8,7 @@ function Login () {
   const handleClick = (e) => {
     console.log(import.meta.env.VITE_BACKEND_URL)
     e.preventDefault()
-    fetch(import.meta.env.VITE_BACKEND_URL + '/login/custom', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/login/custom`, {
       method: 'POST',
       credentials: 'include'
     })

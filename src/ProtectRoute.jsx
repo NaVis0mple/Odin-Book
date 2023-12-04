@@ -5,7 +5,7 @@ const ProtectRoute = ({ children }) => {
   const [auth, setAuth] = useState(false)
   const navigate = useNavigate()
   useEffect(() => {
-    fetch(import.meta.env.VITE_BACKEND_URL + '/checkAuth', {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/checkAuth`, {
       method: 'GET',
       credentials: 'include'
     })
