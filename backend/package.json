@@ -6,7 +6,7 @@
     "node": ">=16.17.1"
   },
   "scripts": {
-    "start": "nodemon ./bin/www",
+    "start": "node ./bin/www",
     "dev": "DEBUG=backend:* npm start",
     "build":"node ./bin/www"
   },
