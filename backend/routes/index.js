@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const controller_login = require('../controller/login')
 const passport = require('passport')
 const User = require('../model/user')
 const Friendship = require('../model/friendship')
@@ -11,7 +10,7 @@ const upload = multer()
 const { generateFakeFriendship, generateFakeMeUserObjectId, generateFakePost, generateFakeUsers, generateFakeComment } = require('../seed')
 const mongoose = require('mongoose')
 
-/* GET home page. */
+/* generateFakeUsers */
 router.get('/', async function (req, res, next) {
   await generateFakeUsers(10)
   await generateFakeFriendship(0, 1)
@@ -35,7 +34,6 @@ router.get('/login/facebook', passport.authenticate('facebook', {
 }))
 
 router.get('/login/facebook/callback', passport.authenticate('facebook'), function (req, res) {
-  // console.log(req.isAuthenticated())
   res.redirect('http://localhost:5173/')
 })
 
@@ -55,10 +53,8 @@ router.get('/logout', (req, res, next) => {
   req.logOut(function (err) {
     if (err) { return next(err) }
     if (req.isAuthenticated()) {
-      console.log('pass1')
       res.json({ authenticated: true, user: require.user })
     } else {
-      console.log('pass2')
       res.json({ authenticated: false })
     }
   })
