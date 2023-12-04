@@ -35,7 +35,6 @@ async function main () {
     await mongoose.connect(connectionURI)
     console.log(`Connected to MongoDB at ${connectionURI}`)
     store = MongoStore.create({ mongoUrl: connectionURI }) // connect-mongo
-    return connectionURI
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
   }
