@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { UseFriendshipContext } from './context/useFriendship'
 import { UseSocket } from './socketio/socketio'
+
 function FriendRequest () {
   const [friendName, setFriendName] = useState('')
   const [userList, setUserList] = useState([])
@@ -11,7 +12,7 @@ function FriendRequest () {
   useEffect(() => {
     try {
       const fetchUserList = async () => {
-        const fetchData = await fetch('http://localhost:3000/users', {
+        const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/users', {
           method: 'GET',
           credentials: 'include'
         })
@@ -43,7 +44,7 @@ function FriendRequest () {
   const fetchPostFriendRequest = async () => {
     const formData = new FormData()
     formData.append('friendRequestName', friendName)
-    const post = await fetch('http://localhost:3000/friendRequest', {
+    const post = await fetch(import.meta.env.VITE_BACKEND_URL + '/friendRequest', {
       method: 'POST',
       credentials: 'include',
       body: formData

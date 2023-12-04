@@ -6,8 +6,9 @@ function Login () {
   const navigate = useNavigate()
 
   const handleClick = (e) => {
+    console.log(import.meta.env.VITE_BACKEND_URL)
     e.preventDefault()
-    fetch('http://localhost:3000/login/custom', {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/login/custom', {
       method: 'POST',
       credentials: 'include'
     })
@@ -28,7 +29,7 @@ function Login () {
 
   return (
     <div>
-      <a href='http://localhost:3000/login/facebook' className='btn btn-primary'><span className='fa fa-facebook' /> Login with Facebook</a>
+      <a href={`${import.meta.env.VITE_BACKEND_URL}/login/facebook`} className='btn btn-primary'><span className='fa fa-facebook' /> Login with Facebook</a>
       <a href='#' onClick={(e) => handleClick(e)}>local login</a>
     </div>
   )

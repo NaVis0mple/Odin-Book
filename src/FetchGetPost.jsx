@@ -22,7 +22,7 @@ const FetchPost = () => {
   useEffect(() => {
     if (!clickLike) { return }
     const updatePostLike = async () => {
-      const fetchLike = await fetch('http://localhost:3000/updatePostLike', {
+      const fetchLike = await fetch(import.meta.env.VITE_BACKEND_URL + '/updatePostLike', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -46,7 +46,7 @@ const FetchPost = () => {
       const formData = new FormData()
       formData.append('newComment', JSON.stringify(createComment))
       const fetchCreateCommentPost = async () => {
-        const fetchdata = await fetch('http://localhost:3000/createComment', {
+        const fetchdata = await fetch(import.meta.env.VITE_BACKEND_URL + '/createComment', {
           method: 'POST',
           credentials: 'include',
           body: formData

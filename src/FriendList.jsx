@@ -44,7 +44,7 @@ function FriendList () {
 
   useEffect(() => {
     const fetchMe = async () => {
-      const fetchData = await fetch('http://localhost:3000/me', {
+      const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/me', {
         method: 'GET',
         credentials: 'include'
       })
@@ -66,7 +66,7 @@ function FriendList () {
     const formData = new FormData()
     formData.append('friendRequestAction', 'accept')
     formData.append('friendship_id', id)
-    const fetchData = await fetch('http://localhost:3000/friendRequestRespond', {
+    const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/friendRequestRespond', {
       method: 'POST',
       credentials: 'include',
       body: formData
@@ -81,7 +81,7 @@ function FriendList () {
     const formData = new FormData()
     formData.append('friendRequestAction', 'reject')
     formData.append('friendship_id', id)
-    const fetchData = await fetch('http://localhost:3000/friendRequestRespond', {
+    const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/friendRequestRespond', {
       method: 'POST',
       credentials: 'include',
       body: formData

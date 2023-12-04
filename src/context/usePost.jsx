@@ -10,7 +10,7 @@ const usePost = () => {
   const fetchPost = useCallback(async () => {
     // me
     const fetchMe = async () => {
-      const fetchData = await fetch('http://localhost:3000/me', {
+      const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/me', {
         method: 'GET',
         credentials: 'include'
       })
@@ -19,7 +19,7 @@ const usePost = () => {
     }
     fetchMe()
 
-    const fetchData = await fetch('http://localhost:3000/post', {
+    const fetchData = await fetch(import.meta.env.VITE_BACKEND_URL + '/post', {
       method: 'GET',
       credentials: 'include'
     })

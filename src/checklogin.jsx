@@ -1,6 +1,6 @@
 function CheckLogin () {
   const handleCheck = () => {
-    fetch('http://localhost:3000/checkAuth', {
+    fetch(import.meta.env.VITE_BACKEND_URL + '/checkAuth', {
       method: 'GET',
       credentials: 'include'
     })

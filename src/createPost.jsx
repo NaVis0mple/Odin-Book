@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { UsePostContext } from './context/usePost'
+
 function CreatePost () {
   const [textarea, setTextarea] = useState('')
   const { fetchPost, setLike, clickLike, setClickLike, like, post } = UsePostContext()
@@ -9,7 +10,7 @@ function CreatePost () {
     const formData = new FormData()
     formData.append('postText', textarea)
     const fetchCreatePost = async () => {
-      const fetchPostResponse = await fetch('http://localhost:3000/createpost', {
+      const fetchPostResponse = await fetch(import.meta.env.VITE_BACKEND_URL + '/createpost', {
         method: 'POST',
         credentials: 'include',
         body: formData

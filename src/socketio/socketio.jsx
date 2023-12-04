@@ -6,7 +6,7 @@ export const SocketProvider = ({ children }) => {
   const socket = useRef(null)
 
   useEffect(() => {
-    socket.current = io('http://localhost:3000', {
+    socket.current = io(import.meta.env.VITE_BACKEND_URL, {
       'force new connection': true,
       reconnectionAttempts: 'Infinity',
       timeout: 10000,
