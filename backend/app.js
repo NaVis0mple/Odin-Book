@@ -24,14 +24,14 @@ const app = express()
 // mongodb connect
 let store // connect-mongo
 async function main () {
-  let connectionURI
-  if (process.env.NODE_ENV === 'test') {
-    const mongod = await MongoMemoryServer.create()
-    connectionURI = mongod.getUri()
-  } else {
-    connectionURI = process.env.mongodbURL
-  }
   try {
+    let connectionURI
+    if (process.env.NODE_ENV === 'test') {
+      const mongod = await MongoMemoryServer.create()
+      connectionURI = mongod.getUri()
+    } else {
+      connectionURI = process.env.mongodbURL
+    }
     await mongoose.connect(connectionURI)
     console.log(`Connected to MongoDB at ${connectionURI}`)
     store = MongoStore.create({ mongoUrl: connectionURI }) // connect-mongo
