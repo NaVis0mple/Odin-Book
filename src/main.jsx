@@ -17,9 +17,9 @@ import { SocketProvider } from './socketio/socketio.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/'>
+    <Route path='/Odin-Book/'>
       <Route
-        path='/'
+        path='/Odin-Book/'
         element={
           <ProtectRoute>
             <SocketProvider>
@@ -31,16 +31,16 @@ const router = createBrowserRouter(
 }
       />
       <Route
-        path='/login'
+        path='/Odin-Book/login'
         element={<Login />}
       />
       <Route
-        path='/friend'
+        path='/Odin-Book/friend'
         element={
           <ProtectRoute>
             <SocketProvider>
               <FriendshipProvider>
-                <Link to='/'><Icon path={mdiHome} size={1} /></Link>
+                <Link to='/Odin-Book/'><Icon path={mdiHome} size={1} /></Link>
                 <Logout />
                 <FriendList />
                 <FriendRequest />
