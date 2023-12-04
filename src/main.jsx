@@ -14,6 +14,7 @@ import { PostContextProvider } from './context/usePost.jsx'
 import Icon from '@mdi/react'
 import { mdiHome } from '@mdi/js'
 import { SocketProvider } from './socketio/socketio.jsx'
+import Test from './Test.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,10 @@ const router = createBrowserRouter(
       <Route
         path='/Odin-Book/login'
         element={<Login />}
+      />
+      <Route
+        path='/Odin-Book/test'
+        element={<Test />}
       />
       <Route
         path='/Odin-Book/friend'
