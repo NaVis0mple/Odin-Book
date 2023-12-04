@@ -82,7 +82,7 @@ app.use(passport.session())
 passport.use(new FacebookStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: 'http://localhost:3000/login/facebook/callback',
+  callbackURL: `http://localhost:${process.env.PORT}/login/facebook/callback`,
   profileFields: ['email', 'picture', 'name']
 }, async function (accessToken, refreshToken, profile, done) {
   const data = profile._json

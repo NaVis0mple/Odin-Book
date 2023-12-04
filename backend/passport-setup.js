@@ -4,7 +4,7 @@ require('dotenv').config()
 module.exports = new FacebookStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: 'http://localhost:3000/login/facebook/callback'
+  callbackURL: `http://localhost:${process.env.PORT}/login/facebook/callback`
 },
 function (accessToken, refreshToken, profile, done) {
   // You can save the user profile information in your database or perform other actions.
