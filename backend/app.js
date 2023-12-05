@@ -103,7 +103,7 @@ app.use(passport.session())
 passport.use(new FacebookStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: 'https://odin-book-navis0mples-projects.vercel.app/login/facebook/callback',
+  callbackURL: 'https://odinbook.adaptable.app/login/facebook/callback',
   profileFields: ['email', 'picture', 'name']
 }, async function (accessToken, refreshToken, profile, done) {
   const data = profile._json
