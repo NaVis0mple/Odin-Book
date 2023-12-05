@@ -34,7 +34,7 @@ router.get('/login/facebook', passport.authenticate('facebook', {
 }))
 
 router.get('/login/facebook/callback', passport.authenticate('facebook'), function (req, res) {
-  res.redirect('https://navis0mple.github.io/Odin-Book/')
+  res.redirect('https://odin-book-navis0mples-projects.vercel.app/')
 })
 
 router.get('/checkAuth', async (req, res) => {
