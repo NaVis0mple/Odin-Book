@@ -34,8 +34,8 @@ async function main () {
     }
     await mongoose.connect(connectionURI)
     console.log(`Connected to MongoDB at ${connectionURI}`)
-    store = new MongoStore({ mongooseConnection: mongoose.connection }) // connect-mongo
-    console.log(store)
+    // store = new MongoStore({ mongooseConnection: mongoose.connection }) // connect-mongo
+    // console.log(store)
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
   }
@@ -71,13 +71,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session({
   secret: process.env.sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  store,
+  resave: true,
+  saveUninitialized: true,
+  store: MongoStore.create({
+    client: mongoose.connection.getClient()
+  }),
   cookie: {
     maxAge: 6000 * 60 * 1000,
     secure: true, // For HTTPS connections
-    sameSite: 'None'
+    sameSite: 'lax'
   } // if set ,connect-mongo will get it.
 }))
 passport.serializeUser(function (user, done) {
