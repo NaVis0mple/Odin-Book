@@ -20,7 +20,7 @@ function Login () {
       })
       .then(data => {
         if (data.authenticated && data.user) {
-          navigate('/')
+          navigate('/Odin-Book/')
         }
         console.log(data)
       })

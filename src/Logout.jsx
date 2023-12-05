@@ -20,7 +20,7 @@ function Logout () {
         } else {
           console.log('pass2')
           console.log('User is not authenticated.')
-          navigate('/login')
+          navigate('/Odin-Book/login')
         }
       })
       .catch(error => console.error('Logout:', error))

@@ -17,12 +17,12 @@ const ProtectRoute = ({ children }) => {
       })
       .then(data => {
         if (data.authenticated === true) {
-          // console.log('User is authenticated:', data.user)
+          console.log('User is authenticated:', data.user)
           setAuth(true)
         } else {
-          // console.log('User is not authenticated.Route is Protected')
+          console.log('User is not authenticated.Route is Protected')
           setAuth(false)
-          navigate('/login')
+          navigate('/Odin-Book/login')
         }
       })
       .catch(error => console.error('Error checking authentication:', error))
