@@ -74,7 +74,11 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store,
-  cookie: { maxAge: 6000 * 60 * 1000 } // if set ,connect-mongo will get it.
+  cookie: {
+    maxAge: 6000 * 60 * 1000,
+    secure: true, // For HTTPS connections
+    sameSite: 'None'
+  } // if set ,connect-mongo will get it.
 }))
 passport.serializeUser(function (user, done) {
   // console.log(user) // you can see it pass from return done(null, newUser)
