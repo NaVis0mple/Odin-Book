@@ -40,7 +40,7 @@ async function main () {
   }
 }
 
-await main()
+main()
 process.on('SIGINT', async () => { // graceful shutdown
   try {
     await mongoose.connection.close()
@@ -75,6 +75,21 @@ app.use(session({
   store,
   cookie: { maxAge: 6000 * 60 * 1000 } // if set ,connect-mongo will get it.
 }))
+passport.serializeUser(function (user, done) {
+  // console.log(user) // you can see it pass from return done(null, newUser)
+  done(null, user._id) // only save id to session
+})
+
+passport.deserializeUser(async function (_id, done) {
+  // console.log(_id)
+  try {
+    const user = await User.findById(_id)
+    console.log('de') // this function call every subsequent req after login
+    done(null, user)
+  } catch (error) {
+    done(error, null)
+  }
+})
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -153,22 +168,6 @@ passport.use(new CustomStrategy(
     console.log('hi')
     return done(null, anonymousUser)
   })) // default: user:undefined, deal this in route
-
-passport.serializeUser(function (user, done) {
-  // console.log(user) // you can see it pass from return done(null, newUser)
-  done(null, user._id) // only save id to session
-})
-
-passport.deserializeUser(async function (_id, done) {
-  // console.log(_id)
-  try {
-    const user = await User.findById(_id)
-    console.log('de') // this function call every subsequent req after login
-    done(null, user)
-  } catch (error) {
-    done(error, null)
-  }
-})
 
 app.use('/', indexRouter)
 // generate fake user
