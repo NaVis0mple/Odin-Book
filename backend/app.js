@@ -71,15 +71,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(session({
   secret: process.env.sessionSecret,
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   store: MongoStore.create({
-    client: mongoose.connection.getClient()
+    mongoUrl: process.env.mongodbURL
   }),
   cookie: {
-    maxAge: 6000 * 60 * 1000,
-    secure: true, // For HTTPS connections
-    sameSite: 'lax'
+    maxAge: 6000 * 60 * 1000
+    // secure: true, // For HTTPS connections
+    // sameSite: 'lax'
   } // if set ,connect-mongo will get it.
 }))
 passport.serializeUser(function (user, done) {
