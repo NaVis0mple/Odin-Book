@@ -22,7 +22,7 @@ const ProtectRoute = ({ children }) => {
         } else {
           console.log('User is not authenticated.Route is Protected')
           setAuth(false)
-          navigate('/Odin-Book/login')
+          navigate('/login')
         }
       })
       .catch(error => console.error('Error checking authentication:', error))

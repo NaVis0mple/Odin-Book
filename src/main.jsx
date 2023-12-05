@@ -18,9 +18,9 @@ import Test from './Test.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/Odin-Book/'>
+    <Route path='/'>
       <Route
-        path='/Odin-Book/'
+        path='/'
         element={
           <ProtectRoute>
             <SocketProvider>
@@ -32,20 +32,20 @@ const router = createBrowserRouter(
 }
       />
       <Route
-        path='/Odin-Book/login'
+        path='/login'
         element={<Login />}
       />
       <Route
-        path='/Odin-Book/test'
+        path='/test'
         element={<Test />}
       />
       <Route
-        path='/Odin-Book/friend'
+        path='/friend'
         element={
           <ProtectRoute>
             <SocketProvider>
               <FriendshipProvider>
-                <Link to='/Odin-Book/'><Icon path={mdiHome} size={1} /></Link>
+                <Link to='/'><Icon path={mdiHome} size={1} /></Link>
                 <Logout />
                 <FriendList />
                 <FriendRequest />
