@@ -77,9 +77,9 @@ app.use(session({
     mongoUrl: process.env.mongodbURL
   }),
   cookie: {
-    maxAge: 6000 * 60 * 1000
+    maxAge: 6000 * 60 * 1000,
     // secure: true, // For HTTPS connections
-    // sameSite: 'lax'
+    sameSite: 'none'
   } // if set ,connect-mongo will get it.
 }))
 passport.serializeUser(function (user, done) {
