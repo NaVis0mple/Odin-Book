@@ -78,7 +78,7 @@ app.use(session({
   }),
   cookie: {
     maxAge: 6000 * 60 * 1000,
-    // secure: true, // For HTTPS connections
+    secure: true, // For HTTPS connections
     sameSite: 'none'
   } // if set ,connect-mongo will get it.
 }))
