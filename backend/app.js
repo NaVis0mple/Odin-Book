@@ -40,7 +40,7 @@ async function main () {
   }
 }
 
-main()
+await main()
 process.on('SIGINT', async () => { // graceful shutdown
   try {
     await mongoose.connection.close()
