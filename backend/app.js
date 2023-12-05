@@ -20,7 +20,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server')
 const { generateFakeUsers, generateFakeFriendship, generateFakeMeUserObjectId, generateFakePost } = require('./seed')
 
 const app = express()
-
+app.enable('trust proxy')
 // mongodb connect
 let store // connect-mongo
 async function main () {
