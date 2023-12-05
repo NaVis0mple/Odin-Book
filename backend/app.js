@@ -34,8 +34,8 @@ async function main () {
     }
     await mongoose.connect(connectionURI)
     console.log(`Connected to MongoDB at ${connectionURI}`)
-    const clientPromise = mongoose.connection.getClient()
-    store = MongoStore.create({ clientPromise }) // connect-mongo
+    store = MongoStore.create({ mongoUrl: connectionURI }) // connect-mongo
+    console.log(store)
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
   }
