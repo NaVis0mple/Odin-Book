@@ -212,19 +212,20 @@ async function (token, tokenSecret, profile, done) {
       existingUser.picture = data.photos[0].value
       await existingUser.save()
       return done(null, existingUser)
-    }
+    } else {
+      const newUser = new User({
+        facebookId: data.id,
+        email: data.emails[0].value,
+        first_name: data.username,
+        last_name: data.displayname,
+        picture: data.photos[0].value
 
-    const newUser = new User({
-      facebookId: data.id,
-      email: data.emails[0].value,
-      first_name: data.username,
-      last_name: data.displayname,
-      picture: data.photos[0].value
-    })
-    await newUser.save()
-    return done(null, newUser) // pass to serialize func
+      })
+      await newUser.save()
+      return done(null, newUser) // pass to serialize func
+    }
   } catch (error) {
-    console.error(error)
+    console.error('Error in Twitter authentication:', error)
     return done(error, null)
   }
 }))
