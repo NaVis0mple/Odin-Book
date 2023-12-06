@@ -35,7 +35,7 @@ router.get('/login/facebook', passport.authenticate('facebook', {
 
 router.get('/login/facebook/callback',
   passport.authenticate('facebook'), function (req, res) {
-    res.redirect(process.env.frontendURL_DEVELOPMENT)
+    res.redirect(process.env.NODE_ENV === 'development' ? process.env.frontendURL_DEVELOPMENT : process.env.frontendURL_PRODUCTION)
   })
 
 router.get('/login/twitter',
@@ -44,7 +44,7 @@ router.get('/login/twitter',
 router.get('/login/twitter/callback',
   passport.authenticate('twitter'),
   function (req, res) {
-    res.redirect(process.env.frontendURL_DEVELOPMENT)
+    res.redirect(process.env.NODE_ENV === 'development' ? process.env.frontendURL_DEVELOPMENT : process.env.frontendURL_PRODUCTION)
   }
 )
 router.get('/checkAuth', async (req, res) => {

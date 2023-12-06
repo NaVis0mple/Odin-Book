@@ -104,7 +104,7 @@ app.use(passport.session())
 passport.use(new FacebookStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: `${process.env.backendURL_DEVELOPMENT}login/facebook/callback`,
+  callbackURL: `${process.env.NODE_ENV === 'development' ? process.env.backendURL_DEVELOPMENT : process.env.backendURL_PRODUCTION}login/facebook/callback`,
   profileFields: ['email', 'picture', 'name']
 }, async function (accessToken, refreshToken, profile, done) {
   const data = profile._json
