@@ -33,10 +33,20 @@ router.get('/login/facebook', passport.authenticate('facebook', {
   scope: ['email', 'user_photos']
 }))
 
-router.get('/login/facebook/callback', passport.authenticate('facebook'), function (req, res) {
-  res.redirect('https://odin-book-navis0mples-projects.vercel.app/')
-})
+router.get('/login/facebook/callback',
+  passport.authenticate('facebook'), function (req, res) {
+    res.redirect(process.env.frontendURL_DEVELOPMENT)
+  })
 
+router.get('/login/twitter',
+  passport.authenticate('twitter'))
+
+router.get('/login/twitter/callback',
+  passport.authenticate('twitter'),
+  function (req, res) {
+    res.redirect(process.env.frontendURL_DEVELOPMENT)
+  }
+)
 router.get('/checkAuth', async (req, res) => {
   if (req.isAuthenticated()) {
     const finduser = await User.find().exec()

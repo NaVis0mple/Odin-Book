@@ -9,8 +9,10 @@ const mongoose = require('mongoose')
 const passport = require('passport')
 // const facebookStrategy = require('./passport-setup')
 require('dotenv').config()
+
 const FacebookStrategy = require('passport-facebook').Strategy
 const CustomStrategy = require('passport-custom').Strategy
+const TwitterStrategy = require('@passport-js/passport-twitter').Strategy
 
 const indexRouter = require('./routes/index')
 const MongoStore = require('connect-mongo')
@@ -22,20 +24,19 @@ const { generateFakeUsers, generateFakeFriendship, generateFakeMeUserObjectId, g
 const app = express()
 app.enable('trust proxy')
 // mongodb connect
-let store // connect-mongo
+
 async function main () {
   try {
     let connectionURI
-    if (process.env.NODE_ENV === 'test') {
-      const mongod = await MongoMemoryServer.create()
-      connectionURI = mongod.getUri()
+    if (process.env.NODE_ENV === 'development') {
+      // const mongod = await MongoMemoryServer.create()
+      // connectionURI = mongod.getUri()
+      connectionURI = process.env.mongodbURL
     } else {
       connectionURI = process.env.mongodbURL
     }
     await mongoose.connect(connectionURI)
     console.log(`Connected to MongoDB at ${connectionURI}`)
-    // store = new MongoStore({ mongooseConnection: mongoose.connection }) // connect-mongo
-    // console.log(store)
   } catch (error) {
     console.error('Error connecting to MongoDB:', error)
   }
@@ -78,8 +79,8 @@ app.use(session({
   }),
   cookie: {
     maxAge: 6000 * 60 * 1000,
-    secure: true, // For HTTPS connections
-    sameSite: 'none'
+    secure: process.env.NODE_ENV !== 'development', // For HTTPS connections
+    sameSite: process.env.NODE_ENV === 'development' ? '' : 'none'
   } // if set ,connect-mongo will get it.
 }))
 passport.serializeUser(function (user, done) {
@@ -103,7 +104,7 @@ app.use(passport.session())
 passport.use(new FacebookStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: 'https://odinbook.adaptable.app/login/facebook/callback',
+  callbackURL: `${process.env.backendURL_DEVELOPMENT}login/facebook/callback`,
   profileFields: ['email', 'picture', 'name']
 }, async function (accessToken, refreshToken, profile, done) {
   const data = profile._json
@@ -132,7 +133,7 @@ passport.use(new FacebookStrategy({
       await existingUser.save()
       return done(null, existingUser)
     }
-    if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV === 'development') {
       const newUser = new User({
         _id: generateFakeMeUserObjectId(), // fixed the admin objectid
         email: data.email,
@@ -175,6 +176,58 @@ passport.use(new CustomStrategy(
     console.log('hi')
     return done(null, anonymousUser)
   })) // default: user:undefined, deal this in route
+
+passport.use(new TwitterStrategy({
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  callbackURL: `${process.env.backendURL_DEVELOPMENT}login/twitter/callback`,
+  includeEmail: true
+},
+async function (token, tokenSecret, profile, done) {
+  const data = profile
+
+  console.log(data.id)
+  console.log(data.username)
+  console.log(data.emails[0].value)
+  console.log(data.photos[0].value)
+
+  // {
+  //   id: '2364366926',
+  //   username: '_____Kappa_____',
+  //   displayName: '¯\\_(ヅ)_/¯',
+  //   emails: [ { value: 'yudj3ej8@gmail.com' } ],
+  //   photos: [
+  //     {
+  //       value: 'https://pbs.twimg.com/profile_images/1491107434403807232/x-enYWsJ_normal.jpg'
+  //     }
+  //   ],
+
+  try {
+    const existingUser = await User.findOne({ email: data.emails[0].value }).exec()
+    // check if existing in db
+    if (existingUser) { // update
+      existingUser.email = data.emails[0].value
+      existingUser.first_name = data.username
+      existingUser.last_name = data.displayname
+      existingUser.picture = data.photos[0].value
+      await existingUser.save()
+      return done(null, existingUser)
+    }
+
+    const newUser = new User({
+      facebookId: data.id,
+      email: data.emails[0].value,
+      first_name: data.username,
+      last_name: data.displayname,
+      picture: data.photos[0].value
+    })
+    await newUser.save()
+    return done(null, newUser) // pass to serialize func
+  } catch (error) {
+    console.error(error)
+    return done(error, null)
+  }
+}))
 
 app.use('/', indexRouter)
 // generate fake user

@@ -30,3 +30,14 @@ dbserver:mongodb atlas
 ##
 passport-custom is good to build test account,
 faker user is trigger in facebookstrategy, maybe move it out
+
+##
+https://stackoverflow.com/questions/37449761/where-does-one-set-the-oauth-redirect-uri-for-facebook-apps
+need setting callbakcurl
+```js
+passport.use(new FacebookStrategy({
+  clientID: process.env.clientID,
+  clientSecret: process.env.clientSecret,
+  callbackURL: 'https://odinbook.adaptable.app/login/facebook/callback',
+  profileFields: ['email', 'picture', 'name']
+```

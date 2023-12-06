@@ -14,6 +14,7 @@ function Login () {
     })
       .then(response => {
         if (!response.ok) {
+          console.log(response)
           throw new Error(`HTTP error! Status: ${response.status}`)
         }
         return response.json()
@@ -30,7 +31,10 @@ function Login () {
   return (
     <div>
       <a href={`${import.meta.env.VITE_BACKEND_URL}/login/facebook`} className='btn btn-primary'><span className='fa fa-facebook' /> Login with Facebook</a>
+      <br />
       <a href='#' onClick={(e) => handleClick(e)}>local login</a>
+      <br />
+      <a href={`${import.meta.env.VITE_BACKEND_URL}/login/twitter`} className='btn btn-primary'><span className='fa fa-facebook' /> Login with Twitter</a>
     </div>
   )
 }
