@@ -180,7 +180,7 @@ passport.use(new CustomStrategy(
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: `${process.env.backendURL_DEVELOPMENT}login/twitter/callback`,
+  callbackURL: `${process.env.NODE_ENV === 'development' ? process.env.backendURL_DEVELOPMENT : process.env.backendURL_PRODUCTION}login/twitter/callback`,
   includeEmail: true
 },
 async function (token, tokenSecret, profile, done) {
